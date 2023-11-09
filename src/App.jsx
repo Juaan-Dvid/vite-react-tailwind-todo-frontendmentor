@@ -1,67 +1,86 @@
-import CrossIcon from "./components/icons/CrossIcon";
-import MoonIcon from "./components/icons/MoonIcon";
+import { useState } from "react";
+import Header from "./components/Header";
+import TodoComputed from "./components/TodoComputed";
+import TodoCreate from "./components/TodoCreate";
+import TodoFilter from "./components/TodoFilter";
+import TodoList from "./components/TodoList";
+
+const initialStateTodos = [
+  { id: 1, title: "Complete online javascript course", completed: true },
+  { id: 2, title: "Go to the gym", completed: false},
+  { id: 3, title: "pick up groceries", completed: false},
+  { id: 4, title: "Go to the gym", completed: false},
+  { id: 5, title: "Complete todo app on Frontend Mentor", completed: false},
+
+]
 
 const App = () => {
+
+  const [todos, setTodos] = useState(initialStateTodos);
+
+  const createTodo = (title) => {
+    const newTodo = {
+      id: Date.now(),
+      title: title.trim(),                                      // video 101 (formulario controlado)
+      completed: false,
+    }
+    setTodos([...todos, newTodo]);
+  };
+
+  const removeTodo = (id) => {                                  // video 103 (update & remove)
+    setTodos(todos.filter((todo) => todo.id !== id));
+  }
+
+  const updateTodo = (id) => {                                   // video 103 (update & remove)
+    setTodos(todos.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo))
+  };
+
+  const computedItemsLeft = todos.filter((todo) => !todo.completed).length;
+
+  const clearCompleted = () => {                                // video 104 (computed & clear completed)
+    setTodos(todos.filter((todo) => !todo.completed));
+  };
+
+  const [filter, setFilter] = useState("all");
+
+  const changeFilter = (filter) => setFilter(filter);
+
+  const filteredTodos = () => {   // video 105 (filtros)
+    switch (filter) {
+      case "all" :
+        return todos;
+      case "active" : 
+        return todos.filter((todo) => !todo.completed);
+      case "completed":
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;      
+    }
+  }
+
   return (
-    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain bg-gray-300 min-h-screen">
-      <header className="container mx-auto px-4 pt-8">
-        <div className="flex justify-between">
-          <h1 className="uppercase text-white text-3xl font-semibold tracking-[0.3em]">Todo</h1>    
-          <button>
-            <MoonIcon className="fill-red-400"/>
-          </button>
-        </div>        
-        <form className="bg-white rounded-md overflow-hidden py-4 flex gap-4 items-center px-4 mt-8">
-          <span className="inline-block h-5 w-5 rounded-full border-2"></span>
-          <input 
-          type="text" 
-          placeholder="Create a new todo..."
-          className="w-full text-gray-400 outline-none"
-          />
-        </form>
-      </header> 
+    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain bg-gray-300 min-h-screen dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')]">
+      
+      <Header /> 
 
       <main className="container mx-auto px-4 mt-8">
-        <div className="bg-white [&>article]:p-4 rounded-md ">
-          <article className="flex gap-4 border-b-gray-400 border-b">
-            <button className="inline-block h-5 w-5 rounded-full border-2 flex-none"></button>
-            <p className="text-gray-600 grow">Complete online Javascript course in bluuweb</p>
-            <button className="flex-none">
-              <CrossIcon/>
-            </button>
-          </article>
+        
+        <TodoCreate createTodo={createTodo} />  {/*// video 98 (modularizar parte 1) */} 
 
-          <article className="flex gap-4 border-b-gray-400 border-b">
-            <button className="inline-block h-5 w-5 rounded-full border-2 flex-none"></button>
-            <p className="text-gray-600 grow">Complete online Javascript course in bluuweb</p>
-            <button className="flex-none">
-              <CrossIcon/>
-            </button>
-          </article>
+        
+        <TodoList todos={filteredTodos()} removeTodo={removeTodo} updateTodo={updateTodo}/>   {/*// video 98 (modularizar parte 1) */} 
 
-          <article className="flex gap-4 border-b-gray-400 border-b">
-            <button className="inline-block h-5 w-5 rounded-full border-2 flex-none"></button>
-            <p className="text-gray-600 grow">Complete online Javascript course in bluuweb</p>
-            <button className="flex-none">
-              <CrossIcon/>
-            </button>
-          </article>
+        
+        <TodoComputed computedItemsLeft={computedItemsLeft} clearCompleted={clearCompleted}/>  {/*// video 98 (modularizar parte 1) */} 
 
-          <section className="py-4 px-4 flex justify-between">
-            <span className="text-gray-400">5 items left</span>
-            <button className="text-gray-400">Clear completed</button>
-          </section>
-        </div>  
+        
+        <TodoFilter changeFilter={changeFilter} filter={filter} />  {/*// video 98 (modularizar parte 1) */} 
+            
       </main>   
-      <section className="container mx-auto px-4 mt-8">
-        <div className="bg-white p-4 rounded-md flex justify-center gap-4">
-          <button className="text-blue-600">All</button>
-          <button className="hover:text-blue-600">Active</button>
-          <button className="hover:text-blue-600">Completed</button>
-        </div>
-          
-      </section>    
-      <p className="text-center mt-8">Drag and drop to reorder list</p>    
+
+      
+
+      <footer className="text-center mt-8 dark:text-gray-400">Drag and drop to reorder list</footer>    
     </div>
   );  
 };

@@ -1,4 +1,4 @@
-const MoonIcon = ({ fill = "#fff", ...props}) => {
+const IconMoon = ({ fill = "#fff", ...props}) => {
     return(
         <svg 
             {...props} // video 92 (rest operator, spreed operator)
@@ -19,4 +19,4 @@ const MoonIcon = ({ fill = "#fff", ...props}) => {
     );
 };
 
-export default MoonIcon;
+export default IconMoon;
