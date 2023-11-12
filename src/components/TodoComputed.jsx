@@ -1,10 +1,14 @@
-const TodoComputed = ({computedItemsLeft, clearCompleted}) => {                   // video 98 (modularizar parte 1)
-    return(
-        <section className="py-4 px-4 flex justify-between bg-white rounded-b-md dark:bg-gray-800">
-          <span className="text-gray-400">{computedItemsLeft} items left</span>
-          <button className="text-gray-400" onClick={clearCompleted}>Clear completed</button>
-        </section>
-    );
- };
+const TodoComputed = ({ computedItemsLeft, clearCompleted }) => {                 // video 98 (modularizar parte 1)
+  return (
+      <section className="flex justify-between rounded-b-md bg-white py-4 px-4 transition-all duration-1000 dark:bg-gray-800">
+          <span className="text-gray-400">
+              {computedItemsLeft} items left
+          </span>
+          <button className="text-gray-400" onClick={clearCompleted}>
+              Clear Completed
+          </button>
+      </section>
+  );
+};
 
- export default TodoComputed;
+export default TodoComputed;
